@@ -13,6 +13,9 @@
 #define DEGREES_TO_RADIANS(angle) ((angle * M_PI) / 180.0 )
 #define ANIMATE_DURATION          0.75
 
+#define FIRST_ANIMATION_START_ANGLE 30
+#define FIRST_ANIMATION_END_ANGLE   270
+
 @interface ViewController ()
 {
     CAShapeLayer *_activeLayer;
@@ -34,11 +37,22 @@
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor grayColor];
     
-    [self animateWithStartAngle:0
-                       endAngle:270
-                    strokeColor:[UIColor whiteColor]
-                      lineWidth:3
-                      clockwise:YES];
+//    [self animateWithStartAngle:30
+//                       endAngle:270
+//                    strokeColor:[UIColor whiteColor]
+//                      lineWidth:3
+//                      clockwise:YES];
+    [self firstAnimation];
+    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION
+                                     target:self
+                                   selector:@selector(secondAnimation)
+                                   userInfo:nil
+                                    repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 2
+                                     target:self
+                                   selector:@selector(thirdAnimation)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 -(void)animateWithStartAngle:(CGFloat)start
@@ -84,7 +98,7 @@
 
 #pragma mark - Button Click
 - (IBAction)eraseAction:(id)sender {
-    [self animateWithStartAngle:0
+    [self animateWithStartAngle:30
                        endAngle:270 - 30
                     strokeColor:self.animationView.backgroundColor
                       lineWidth:6
@@ -94,17 +108,17 @@
     [UIView setAnimationDuration:ANIMATE_DURATION];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(endAnimation)];
-    self.animationView.layer.transform = CATransform3DMakeRotation(DEGREES_TO_RADIANS(90), 0, 0, 1);
+    self.animationView.layer.transform = CATransform3DMakeRotation(DEGREES_TO_RADIANS(45), 0, 0, 1);
     [UIView commitAnimations];
 }
 
-- (IBAction)draw:(id)sender {
-    [self animateWithStartAngle:0
-                       endAngle:270
-                    strokeColor:[UIColor whiteColor]
-                      lineWidth:3
-                      clockwise:YES];
-}
+//- (IBAction)draw:(id)sender {
+//    [self animateWithStartAngle:0
+//                       endAngle:270
+//                    strokeColor:[UIColor whiteColor]
+//                      lineWidth:3
+//                      clockwise:YES];
+//}
 
 #pragma mark - Animation Delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -118,6 +132,44 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+#pragma mark - Animation 
+- (void)firstAnimation {
+    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE
+                       endAngle:FIRST_ANIMATION_END_ANGLE
+                    strokeColor:[UIColor whiteColor]
+                      lineWidth:3
+                      clockwise:YES];
+}
+
+- (void)secondAnimation {
+    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE
+                       endAngle:FIRST_ANIMATION_END_ANGLE - 10
+                    strokeColor:self.animationView.backgroundColor
+                      lineWidth:6
+                      clockwise:YES];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:ANIMATE_DURATION];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(endAnimation)];
+    self.animationView.layer.transform = CATransform3DMakeRotation(DEGREES_TO_RADIANS(45), 0, 0, 1);
+    [UIView commitAnimations];
+}
+
+- (void)thirdAnimation {
+    [self animateWithStartAngle:270
+                       endAngle:270
+                    strokeColor:[UIColor whiteColor]
+                      lineWidth:3
+                      clockwise:YES];
+//    [self firstAnimation];
+//    [UIView beginAnimations:nil context:nil];
+//    [UIView setAnimationDuration:ANIMATE_DURATION];
+//    [UIView setAnimationDelegate:self];
+//    [UIView setAnimationDidStopSelector:@selector(endAnimation)];
+//    self.animationView.layer.transform = CATransform3DMakeRotation(DEGREES_TO_RADIANS(45), 0, 0, 1);
+//    [UIView commitAnimations];
 }
 
 @end
