@@ -47,8 +47,6 @@ _Pragma("clang diagnostic pop") \
 @interface KWProgressHUD() {
     CGFloat       _rotatedAngle;
     CATransform3D _lastTransform;
-    CAShapeLayer  *_activeLayer;
-    CAShapeLayer  *_newLayer;
     UIView        *_baseView;
     UIColor       *_circleColor;
     int           _animationCount;
@@ -57,14 +55,6 @@ _Pragma("clang diagnostic pop") \
 @end
 
 @implementation KWProgressHUD
-
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 
 #pragma mark - Public Method
 + (void)showToView:(UIView *)view
@@ -235,12 +225,6 @@ _Pragma("clang diagnostic pop") \
                   endAngle:DEGREES_TO_RADIANS(endAngle)
                  clockwise:clockwise];
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    if (!_activeLayer) {
-        _activeLayer = shapeLayer;
-    }
-    else {
-        _newLayer = shapeLayer;
-    }
     [self.layer addSublayer:shapeLayer];
     shapeLayer.path = path.CGPath;//46,169,230
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
