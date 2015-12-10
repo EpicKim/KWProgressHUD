@@ -14,6 +14,7 @@
 #define KW_FIRST_ANIMATION_START_ANGLE                    330
 #define KW_FIRST_ANIMATION_END_ANGLE                      90
 #define KW_HUD_RADIUS                                     25
+#define KW_HUD_CIRCLE_WIDTH                               2
 
 @interface KWProgressHUD() {
     CGFloat       _rotatedAngle;
@@ -54,7 +55,11 @@
     hud->_baseView = view;
     [hud->_baseView addSubview:hud];
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 4 target:hud selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 4
+                                                      target:hud
+                                                    selector:@selector(startCycleAnimation)
+                                                    userInfo:nil
+                                                     repeats:YES];
     [timer fire];
 }
 
@@ -106,16 +111,16 @@
     [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE
                     strokeColor:[self circleColor]
-                      lineWidth:3
+                      lineWidth:KW_HUD_CIRCLE_WIDTH
                       clockwise:YES
                        duration:0];
 }
 
 - (void)secondAnimation {
-    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle
+    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle + 1
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
                     strokeColor:self.backgroundColor
-                      lineWidth:6
+                      lineWidth:KW_HUD_CIRCLE_WIDTH * 2
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
     
@@ -126,7 +131,7 @@
     [self animateWithStartAngle:45 + _rotatedAngle
                        endAngle:50 + _rotatedAngle
                     strokeColor:[self circleColor]
-                      lineWidth:3
+                      lineWidth:KW_HUD_CIRCLE_WIDTH
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
     
@@ -137,7 +142,7 @@
     [self animateWithStartAngle:-40 + _rotatedAngle
                        endAngle:-30 + _rotatedAngle
                     strokeColor:self.backgroundColor
-                      lineWidth:6
+                      lineWidth:KW_HUD_CIRCLE_WIDTH * 2
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
     
@@ -148,7 +153,7 @@
     [self animateWithStartAngle:150 + _rotatedAngle
                        endAngle:-90 + _rotatedAngle
                     strokeColor:[self circleColor]
-                      lineWidth:3
+                      lineWidth:KW_HUD_CIRCLE_WIDTH
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
     

@@ -29,6 +29,9 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    [KWProgressHUD showToView:self.view
+                        color:nil];
 }
 
 - (void)didReceiveMemoryWarning
