@@ -8,13 +8,34 @@
 
 #import "KWProgressHUD.h"
 
+#define KW_SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+
 #define DEGREES_TO_RADIANS(angle)                         ((angle * M_PI) / 180.0 )
 
 #define KW_ANIMATE_DURATION                               0.75
 #define KW_FIRST_ANIMATION_START_ANGLE                    330
 #define KW_FIRST_ANIMATION_END_ANGLE                      90
-#define KW_HUD_RADIUS                                     100
+#define KW_HUD_RADIUS                                     25
 #define KW_HUD_CIRCLE_WIDTH                               2
+
+@interface KWAnimationObject : NSObject
++ (instancetype)objectWithSel:(SEL)selector;
+@property (nonatomic, assign) SEL selector;
+@end
+
+@implementation KWAnimationObject
++ (instancetype)objectWithSel:(SEL)selector {
+    KWAnimationObject *animationObject = [[KWAnimationObject alloc] init];
+    animationObject.selector = selector;
+    return animationObject;
+}
+@end
 
 @interface KWBackgroundView : UIView
 
@@ -30,7 +51,9 @@
     CAShapeLayer  *_newLayer;
     UIView        *_baseView;
     UIColor       *_circleColor;
+    int           _animationCount;
 }
+@property (nonatomic, strong) NSMutableArray *animationSelectorArray;
 @end
 
 @implementation KWProgressHUD
@@ -86,12 +109,7 @@
         [backgroundView insertSubview:imageView belowSubview:hud];
     }
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 4
-                                                      target:hud
-                                                    selector:@selector(startCycleAnimation)
-                                                    userInfo:nil
-                                                     repeats:YES];
-    [timer fire];
+    [hud startCycleAnimation];
 }
 
 + (void)hidForView:(UIView *)view {
@@ -105,42 +123,48 @@
 
 #pragma mark - Animation Delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    
+    if (!flag) {
+        return;
+    }
+    _animationCount ++;
+    _animationCount = _animationCount % 4;
+    if (_animationCount == 0) {
+        [self setupAnimation];
+    }
+    KWAnimationObject *animationObject = [self.animationSelectorArray objectAtIndex:_animationCount];
+    if ([self respondsToSelector:animationObject.selector]) {
+        KW_SuppressPerformSelectorLeakWarning(
+        [self performSelector:animationObject.selector withObject:nil]
+        );
+    }
 }
 
 
 #pragma mark - Animation Life Circle
 - (void)initAnimation {
     _lastTransform = CATransform3DIdentity;
+    
+    _animationCount = 0;
+    self.animationSelectorArray = [[NSMutableArray alloc] init];
+    [self.animationSelectorArray addObject:[KWAnimationObject objectWithSel:@selector(firstAnimation)]];
+    [self.animationSelectorArray addObject:[KWAnimationObject objectWithSel:@selector(secondAnimation)]];
+    [self.animationSelectorArray addObject:[KWAnimationObject objectWithSel:@selector(thirdAnimation)]];
+    [self.animationSelectorArray addObject:[KWAnimationObject objectWithSel:@selector(forthAnimation)]];
+    
 }
 
 - (void)startCycleAnimation {
+    [self setupAnimation];
+    [self firstAnimation];
+}
+
+#pragma mark - Animation
+- (void)setupAnimation {
     NSArray *layers = self.layer.sublayers;
     for (int i = 0; i < layers.count; i++) {
         CAShapeLayer *layer = [layers objectAtIndex:i];
         [layer removeFromSuperlayer];
     }
-    [self firstAnimation];
-    [self secondAnimation];
-    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 1
-                                     target:self
-                                   selector:@selector(thirdAnimation)
-                                   userInfo:nil
-                                    repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 2
-                                     target:self
-                                   selector:@selector(forthAnimation)
-                                   userInfo:nil
-                                    repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 3
-                                     target:self
-                                   selector:@selector(fifthAnimation)
-                                   userInfo:nil
-                                    repeats:NO];
-}
-
-#pragma mark - Animation
-- (void)firstAnimation {
     [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE + _rotatedAngle
                     strokeColor:[self circleColor]
@@ -149,7 +173,7 @@
                        duration:0];
 }
 
-- (void)secondAnimation {
+- (void)firstAnimation {
     [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle + 1
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
                     strokeColor:[self eraseColor]
@@ -160,7 +184,7 @@
     [self rotateWithAngle:45];
 }
 
-- (void)thirdAnimation {
+- (void)secondAnimation {
     [self animateWithStartAngle:45 + _rotatedAngle
                        endAngle:50 + _rotatedAngle
                     strokeColor:[self circleColor]
@@ -171,7 +195,7 @@
     [self rotateWithAngle:90];
 }
 
-- (void)forthAnimation {
+- (void)thirdAnimation {
     [self animateWithStartAngle:-40 + _rotatedAngle
                        endAngle:-30 + _rotatedAngle
                     strokeColor:[self eraseColor]
@@ -182,7 +206,7 @@
     [self rotateWithAngle:180];
 }
 
-- (void)fifthAnimation {
+- (void)forthAnimation {
     [self animateWithStartAngle:150 + _rotatedAngle
                        endAngle:-90 + _rotatedAngle
                     strokeColor:[self circleColor]
@@ -266,7 +290,6 @@
 
 - (UIColor *)eraseColor {
     return _baseView.backgroundColor;
-//    return [UIColor blueColor];
 }
 
 @end
