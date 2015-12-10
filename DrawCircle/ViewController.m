@@ -36,6 +36,7 @@
 
 @implementation ViewController
 
+#pragma mark - View Controller Life Cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -43,32 +44,24 @@
     
     self.animationView.backgroundColor = [UIColor grayColor];
     [self initAnimation];
-//    [self draw:nil];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Button Click
-//- (IBAction)eraseAction:(id)sender {
-//    [self animateWithStartAngle:30
-//                       endAngle:270 - 30
-//                    strokeColor:self.animationView.backgroundColor
-//                      lineWidth:6
-//                      clockwise:YES];
-//    
-//    [UIView beginAnimations:nil context:nil];
-//    [UIView setAnimationDuration:ANIMATE_DURATION];
-//    [UIView setAnimationDelegate:self];
-//    [UIView setAnimationDidStopSelector:@selector(endAnimation)];
-//    self.animationView.layer.transform = CATransform3DMakeRotation(DEGREES_TO_RADIANS(45), 0, 0, 1);
-//    [UIView commitAnimations];
-//}
+- (IBAction)eraseAction:(id)sender {
+//    self.animationView.transform = CGAffineTransformIdentity;
+//    [self initAnimation];
+    
+}
 
 - (IBAction)draw:(id)sender {
-//    if (_activeLayer) {
-//        _rotatedAngle = 0;
-//        _lastTransform = CATransform3DIdentity;
-//        [_activeLayer removeFromSuperlayer];
-//    }
-    [self startCycleAnimation];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 4 target:self selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
+    [timer fire];
 }
 
 #pragma mark - Animation Delegate
@@ -79,35 +72,29 @@
 //    }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Animation Life Circle
 - (void)initAnimation {
     _lastTransform = CATransform3DIdentity;
+    if (_activeLayer) {
+        [_activeLayer removeFromSuperlayer];
+    }
     [self firstAnimation];
 }
 
 - (void)startCycleAnimation {
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION
-                                     target:self
-                                   selector:@selector(secondAnimation)
-                                   userInfo:nil
-                                    repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 2
+    [self secondAnimation];
+    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 1
                                      target:self
                                    selector:@selector(thirdAnimation)
                                    userInfo:nil
                                     repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 3
+    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 2
                                      target:self
                                    selector:@selector(forthAnimation)
                                    userInfo:nil
                                     repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 4
+    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 3
                                      target:self
                                    selector:@selector(fifthAnimation)
                                    userInfo:nil
@@ -125,15 +112,14 @@
 }
 
 - (void)secondAnimation {
-    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE
-                       endAngle:FIRST_ANIMATION_END_ANGLE + 10
+    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE + _rotatedAngle
+                       endAngle:FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
                     strokeColor:self.animationView.backgroundColor
                       lineWidth:6
                       clockwise:YES
                        duration:ANIMATE_DURATION];
     
     [self rotateWithAngle:45];
-    _rotatedAngle += 45;
 }
 
 - (void)thirdAnimation {
@@ -148,8 +134,8 @@
 }
 
 - (void)forthAnimation {
-    [self animateWithStartAngle:50 + _rotatedAngle
-                       endAngle:50 + _rotatedAngle + 10
+    [self animateWithStartAngle:-40 + _rotatedAngle
+                       endAngle:-30 + _rotatedAngle
                     strokeColor:self.animationView.backgroundColor
                       lineWidth:6
                       clockwise:YES
@@ -159,8 +145,8 @@
 }
 
 - (void)fifthAnimation {
-    [self animateWithStartAngle:50 + _rotatedAngle + 10
-                       endAngle:50 + _rotatedAngle + 10 + 90 + 30
+    [self animateWithStartAngle:150 + _rotatedAngle
+                       endAngle:-90 + _rotatedAngle
                     strokeColor:ANIMATION_DRAW_COLOR
                       lineWidth:3
                       clockwise:YES
@@ -209,6 +195,7 @@
 }
 
 - (void)rotateWithAngle:(float)angle {
+    _rotatedAngle += angle;
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:ANIMATE_DURATION];
     [UIView setAnimationDelegate:self];
