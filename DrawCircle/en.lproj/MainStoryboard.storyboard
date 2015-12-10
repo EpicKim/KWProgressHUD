@@ -18,17 +18,17 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="42V-DE-uxN">
-                                <rect key="frame" x="137" y="503" width="46" height="30"/>
+                                <rect key="frame" x="145" y="503" width="30" height="30"/>
                                 <animations/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="hide"/>
                                 <connections>
                                     <action selector="eraseAction:" destination="2" eventType="touchUpInside" id="c5U-ic-Ten"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AFT-lr-c0Z">
-                                <rect key="frame" x="145" y="457" width="30" height="30"/>
+                                <rect key="frame" x="143" y="457" width="34" height="30"/>
                                 <animations/>
-                                <state key="normal" title="画"/>
+                                <state key="normal" title="draw"/>
                                 <connections>
                                     <action selector="draw:" destination="2" eventType="touchUpInside" id="SgF-jG-nTQ"/>
                                 </connections>

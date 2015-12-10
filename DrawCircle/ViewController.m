@@ -31,7 +31,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     [KWProgressHUD showToView:self.view
-                        color:nil];
+                        color:[UIColor redColor]
+                        image:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,7 +48,8 @@
 
 - (IBAction)draw:(id)sender {
     [KWProgressHUD showToView:self.view
-                        color:nil];
+                        color:nil
+                        image:nil];
 }
 
 @end

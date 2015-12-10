@@ -10,6 +10,7 @@
 
 @interface KWProgressHUD : UIView
 + (void)showToView:(UIView *)view
-             color:(UIColor *)color;
+             color:(UIColor *)color
+             image:(UIImage *)image;
 + (void)hidForView:(UIView *)view;
 @end

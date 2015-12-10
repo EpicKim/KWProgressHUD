@@ -16,6 +16,13 @@
 #define KW_HUD_RADIUS                                     25
 #define KW_HUD_CIRCLE_WIDTH                               2
 
+@interface KWBackgroundView : UIView
+
+@end
+
+@implementation KWBackgroundView
+
+@end
 @interface KWProgressHUD() {
     CGFloat       _rotatedAngle;
     CATransform3D _lastTransform;
@@ -29,31 +36,55 @@
 @implementation KWProgressHUD
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 #pragma mark - Public Method
 + (void)showToView:(UIView *)view
-             color:(UIColor *)color {
+             color:(UIColor *)color
+             image:(UIImage *)image {
     CGRect baseRect = view.frame;
     int hudWidth = KW_HUD_RADIUS * 2;
     int hudHeight = KW_HUD_RADIUS * 2;
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
+    CGRect hudRect = CGRectMake((baseRect.size.width - hudWidth)/2,
+                                (screenRect.size.height - hudHeight)/2 - 64,
+                                hudWidth,
+                                hudHeight);
+    KWBackgroundView *backgroundView = [[KWBackgroundView alloc] init];
+    backgroundView.backgroundColor = view.backgroundColor;
+    backgroundView.frame = hudRect;
+    
     KWProgressHUD *hud = [[KWProgressHUD alloc] init];
-    hud.frame = CGRectMake((baseRect.size.width - hudWidth)/2,
-                           (baseRect.size.height - hudHeight)/2,
+    hud.frame = CGRectMake(0,
+                           0,
                            hudWidth,
-                           hudHeight);
+                           hudHeight);;
     if (color) {
         hud->_circleColor = color;
     }
-    hud.backgroundColor = view.backgroundColor;
+    hud.backgroundColor = [UIColor clearColor];
     [hud initAnimation];
     hud->_baseView = view;
-    [hud->_baseView addSubview:hud];
+    [hud->_baseView addSubview:backgroundView];
+    [backgroundView addSubview:hud];
+    
+    // set image
+    if (image) {
+        int imageWidth = image.size.width/2;
+        int imageHeight = image.size.height/2;
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.frame = CGRectMake((hudWidth - imageWidth)/2,
+                                     (hudHeight - imageHeight)/2,
+                                     imageWidth,
+                                     imageHeight);
+        [backgroundView insertSubview:imageView belowSubview:hud];
+    }
     
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 4
                                                       target:hud
@@ -66,7 +97,7 @@
 + (void)hidForView:(UIView *)view {
     NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
     for (UIView *subview in subviewsEnum) {
-        if ([subview isKindOfClass:self]) {
+        if ([subview isKindOfClass:[KWBackgroundView class]]) {
             [subview removeFromSuperview];
         }
     }
@@ -119,7 +150,7 @@
 - (void)secondAnimation {
     [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle + 1
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
-                    strokeColor:self.backgroundColor
+                    strokeColor:[self eraseColor]
                       lineWidth:KW_HUD_CIRCLE_WIDTH * 2
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
@@ -141,7 +172,7 @@
 - (void)forthAnimation {
     [self animateWithStartAngle:-40 + _rotatedAngle
                        endAngle:-30 + _rotatedAngle
-                    strokeColor:self.backgroundColor
+                    strokeColor:[self eraseColor]
                       lineWidth:KW_HUD_CIRCLE_WIDTH * 2
                       clockwise:YES
                        duration:KW_ANIMATE_DURATION];
@@ -204,7 +235,6 @@
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:KW_ANIMATE_DURATION];
     [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(endAnimation)];
     _lastTransform = CATransform3DRotate(_lastTransform, DEGREES_TO_RADIANS(angle) , 0, 0, 1);
     self.layer.transform = _lastTransform;
     [UIView commitAnimations];
@@ -229,4 +259,9 @@
         return [UIColor blueColor];
     }
 }
+
+- (UIColor *)eraseColor {
+    return _baseView.backgroundColor;
+}
+
 @end

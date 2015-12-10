@@ -19,7 +19,7 @@
 		70069F1D17CC8CDA00405A89 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70069F1B17CC8CDA00405A89 /* MainStoryboard.storyboard */; };
 		70069F2017CC8CDA00405A89 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70069F1F17CC8CDA00405A89 /* ViewController.m */; };
 		70069F2717CC8DC900405A89 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70069F2617CC8DC900405A89 /* QuartzCore.framework */; };
-		811E06411C1907E400C477C4 /* KWProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 811E06401C1907E400C477C4 /* KWProgressHUD.m */; };
+		811E064C1C19466400C477C4 /* KWProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 811E064B1C19466400C477C4 /* KWProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,8 +40,8 @@
 		70069F1E17CC8CDA00405A89 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		70069F1F17CC8CDA00405A89 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		70069F2617CC8DC900405A89 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		811E063F1C1907E400C477C4 /* KWProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProgressHUD.h; sourceTree = "<group>"; };
-		811E06401C1907E400C477C4 /* KWProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProgressHUD.m; sourceTree = "<group>"; };
+		811E064A1C19466400C477C4 /* KWProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProgressHUD.h; sourceTree = "<group>"; };
+		811E064B1C19466400C477C4 /* KWProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +62,7 @@
 		70069EF717CC8CD900405A89 = {
 			isa = PBXGroup;
 			children = (
-				70069F2617CC8DC900405A89 /* QuartzCore.framework */,
+				811E06491C19466400C477C4 /* KWProgressHUD */,
 				70069F0917CC8CD900405A89 /* DrawCircle */,
 				70069F0217CC8CD900405A89 /* Frameworks */,
 				70069F0117CC8CD900405A89 /* Products */,
@@ -80,6 +80,7 @@
 		70069F0217CC8CD900405A89 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				70069F2617CC8DC900405A89 /* QuartzCore.framework */,
 				70069F0317CC8CD900405A89 /* UIKit.framework */,
 				70069F0517CC8CD900405A89 /* Foundation.framework */,
 				70069F0717CC8CD900405A89 /* CoreGraphics.framework */,
@@ -96,8 +97,6 @@
 				70069F1E17CC8CDA00405A89 /* ViewController.h */,
 				70069F1F17CC8CDA00405A89 /* ViewController.m */,
 				70069F0A17CC8CD900405A89 /* Supporting Files */,
-				811E063F1C1907E400C477C4 /* KWProgressHUD.h */,
-				811E06401C1907E400C477C4 /* KWProgressHUD.m */,
 			);
 			path = DrawCircle;
 			sourceTree = "<group>";
@@ -114,6 +113,16 @@
 				70069F1917CC8CDA00405A89 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		811E06491C19466400C477C4 /* KWProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				811E064A1C19466400C477C4 /* KWProgressHUD.h */,
+				811E064B1C19466400C477C4 /* KWProgressHUD.m */,
+			);
+			name = KWProgressHUD;
+			path = DrawCircle/KWProgressHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,8 +192,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				70069F1017CC8CDA00405A89 /* main.m in Sources */,
-				811E06411C1907E400C477C4 /* KWProgressHUD.m in Sources */,
 				70069F1417CC8CDA00405A89 /* AppDelegate.m in Sources */,
+				811E064C1C19466400C477C4 /* KWProgressHUD.m in Sources */,
 				70069F2017CC8CDA00405A89 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
