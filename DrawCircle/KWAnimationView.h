@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface KWAnimationView : UIView
-- (void)showHUDAddedToView:(UIView *)view;
++ (void)showHUDAddedToView:(UIView *)view;
 @end

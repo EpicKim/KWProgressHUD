@@ -45,7 +45,7 @@
 }
 
 - (IBAction)draw:(id)sender {
-    [self.animationView showHUDAddedToView:self.view];
+    [KWAnimationView showHUDAddedToView:self.view];
 }
 
 @end

@@ -15,15 +15,19 @@
 #define FIRST_ANIMATION_END_ANGLE   90
 #define ANIMATION_DRAW_COLOR [UIColor blueColor]
 
+
+#define KW_HUD_WIDTH  200
+#define KW_HUD_HEIGHT 200
+
 @interface KWAnimationView() {
     CGFloat _rotatedAngle;
     CATransform3D _lastTransform;
     CAShapeLayer *_activeLayer;
     CAShapeLayer *_newLayer;
-    
     UIView *_baseView;
 }
 @end
+
 @implementation KWAnimationView
 
 /*
@@ -33,11 +37,19 @@
     // Drawing code
 }
 */
-- (void)showHUDAddedToView:(UIView *)view {
-    _baseView = view;
-    self.backgroundColor = [UIColor grayColor];
-    [self initAnimation];
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 4 target:self selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
++ (void)showHUDAddedToView:(UIView *)view {
+    CGRect baseRect = view.frame;
+    KWAnimationView *hud = [[KWAnimationView alloc] init];
+    hud.frame = CGRectMake((baseRect.size.width - KW_HUD_WIDTH)/2,
+                           (baseRect.size.height - KW_HUD_HEIGHT)/2,
+                           KW_HUD_WIDTH,
+                           KW_HUD_HEIGHT);
+    hud.backgroundColor = [UIColor grayColor];
+    [hud initAnimation];
+    hud->_baseView = view;
+    [hud->_baseView addSubview:hud];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 4 target:hud selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
     [timer fire];
 }
 
