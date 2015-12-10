@@ -7,14 +7,13 @@
 //
 
 #import "KWProgressHUD.h"
-#define ARC_WIDHT 3
-#define DEGREES_TO_RADIANS(angle) ((angle * M_PI) / 180.0 )
-#define ANIMATE_DURATION          0.75
 
-#define FIRST_ANIMATION_START_ANGLE 330
-#define FIRST_ANIMATION_END_ANGLE   90
+#define DEGREES_TO_RADIANS(angle)                         ((angle * M_PI) / 180.0 )
 
-#define KW_HUD_RADIUS  25
+#define KW_ANIMATE_DURATION                               0.75
+#define KW_FIRST_ANIMATION_START_ANGLE                    330
+#define KW_FIRST_ANIMATION_END_ANGLE                      90
+#define KW_HUD_RADIUS                                     25
 
 @interface KWProgressHUD() {
     CGFloat       _rotatedAngle;
@@ -55,7 +54,7 @@
     hud->_baseView = view;
     [hud->_baseView addSubview:hud];
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 4 target:hud selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 4 target:hud selector:@selector(startCycleAnimation) userInfo:nil repeats:YES];
     [timer fire];
 }
 
@@ -85,17 +84,17 @@
 
 - (void)startCycleAnimation {
     [self secondAnimation];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 1
+    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 1
                                      target:self
                                    selector:@selector(thirdAnimation)
                                    userInfo:nil
                                     repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 2
+    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 2
                                      target:self
                                    selector:@selector(forthAnimation)
                                    userInfo:nil
                                     repeats:NO];
-    [NSTimer scheduledTimerWithTimeInterval:ANIMATE_DURATION * 3
+    [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 3
                                      target:self
                                    selector:@selector(fifthAnimation)
                                    userInfo:nil
@@ -104,8 +103,8 @@
 
 #pragma mark - Animation
 - (void)firstAnimation {
-    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE
-                       endAngle:FIRST_ANIMATION_END_ANGLE
+    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE
+                       endAngle:KW_FIRST_ANIMATION_END_ANGLE
                     strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
@@ -113,12 +112,12 @@
 }
 
 - (void)secondAnimation {
-    [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE + _rotatedAngle
-                       endAngle:FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
+    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle
+                       endAngle:KW_FIRST_ANIMATION_END_ANGLE + 10 + _rotatedAngle
                     strokeColor:self.backgroundColor
                       lineWidth:6
                       clockwise:YES
-                       duration:ANIMATE_DURATION];
+                       duration:KW_ANIMATE_DURATION];
     
     [self rotateWithAngle:45];
 }
@@ -129,7 +128,7 @@
                     strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
-                       duration:ANIMATE_DURATION];
+                       duration:KW_ANIMATE_DURATION];
     
     [self rotateWithAngle:90];
 }
@@ -140,7 +139,7 @@
                     strokeColor:self.backgroundColor
                       lineWidth:6
                       clockwise:YES
-                       duration:ANIMATE_DURATION];
+                       duration:KW_ANIMATE_DURATION];
     
     [self rotateWithAngle:180];
 }
@@ -151,7 +150,7 @@
                     strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
-                       duration:ANIMATE_DURATION];
+                       duration:KW_ANIMATE_DURATION];
     
     [self rotateWithAngle:180];
 }
@@ -198,7 +197,7 @@
 - (void)rotateWithAngle:(float)angle {
     _rotatedAngle += angle;
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:ANIMATE_DURATION];
+    [UIView setAnimationDuration:KW_ANIMATE_DURATION];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(endAnimation)];
     _lastTransform = CATransform3DRotate(_lastTransform, DEGREES_TO_RADIANS(angle) , 0, 0, 1);
