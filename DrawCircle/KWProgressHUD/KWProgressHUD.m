@@ -13,7 +13,7 @@
 #define KW_ANIMATE_DURATION                               0.75
 #define KW_FIRST_ANIMATION_START_ANGLE                    330
 #define KW_FIRST_ANIMATION_END_ANGLE                      90
-#define KW_HUD_RADIUS                                     25
+#define KW_HUD_RADIUS                                     100
 #define KW_HUD_CIRCLE_WIDTH                               2
 
 @interface KWBackgroundView : UIView
@@ -112,13 +112,15 @@
 #pragma mark - Animation Life Circle
 - (void)initAnimation {
     _lastTransform = CATransform3DIdentity;
-    if (_activeLayer) {
-        [_activeLayer removeFromSuperlayer];
-    }
-    [self firstAnimation];
 }
 
 - (void)startCycleAnimation {
+    NSArray *layers = self.layer.sublayers;
+    for (int i = 0; i < layers.count; i++) {
+        CAShapeLayer *layer = [layers objectAtIndex:i];
+        [layer removeFromSuperlayer];
+    }
+    [self firstAnimation];
     [self secondAnimation];
     [NSTimer scheduledTimerWithTimeInterval:KW_ANIMATE_DURATION * 1
                                      target:self
@@ -139,8 +141,8 @@
 
 #pragma mark - Animation
 - (void)firstAnimation {
-    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE
-                       endAngle:KW_FIRST_ANIMATION_END_ANGLE
+    [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle
+                       endAngle:KW_FIRST_ANIMATION_END_ANGLE + _rotatedAngle
                     strokeColor:[self circleColor]
                       lineWidth:KW_HUD_CIRCLE_WIDTH
                       clockwise:YES
@@ -222,12 +224,14 @@
     shapeLayer.lineWidth = width;
     shapeLayer.frame = _baseView.frame;
     
-    CABasicAnimation *bas = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    bas.duration = duration;
-    bas.delegate = self;
-    bas.fromValue = [NSNumber numberWithInteger:0];
-    bas.toValue = [NSNumber numberWithInteger:1];
-    [shapeLayer addAnimation:bas forKey:@"key"];
+    if (duration > 0) {
+        CABasicAnimation *bas = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+        bas.duration = duration;
+        bas.delegate = self;
+        bas.fromValue = [NSNumber numberWithInteger:0];
+        bas.toValue = [NSNumber numberWithInteger:1];
+        [shapeLayer addAnimation:bas forKey:@"key"];
+    }
 }
 
 - (void)rotateWithAngle:(float)angle {
@@ -262,6 +266,7 @@
 
 - (UIColor *)eraseColor {
     return _baseView.backgroundColor;
+//    return [UIColor blueColor];
 }
 
 @end
