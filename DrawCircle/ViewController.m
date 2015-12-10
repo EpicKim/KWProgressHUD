@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "KWAnimationView.h"
+#import "KWProgressHUD.h"
 
 @interface ViewController ()
 {
@@ -19,7 +19,7 @@
     BOOL _isPressButton;
     
 }
-@property (weak, nonatomic) IBOutlet KWAnimationView *animationView;
+
 @end
 
 @implementation ViewController
@@ -28,7 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,13 +39,12 @@
 
 #pragma mark - Button Click
 - (IBAction)eraseAction:(id)sender {
-//    self.animationView.transform = CGAffineTransformIdentity;
-//    [self initAnimation];
-    
+    [KWProgressHUD hidForView:self.view];
 }
 
 - (IBAction)draw:(id)sender {
-    [KWAnimationView showHUDAddedToView:self.view];
+    [KWProgressHUD showToView:self.view
+                        color:nil];
 }
 
 @end

@@ -6,29 +6,27 @@
 //  Copyright © 2015年 Yeming. All rights reserved.
 //
 
-#import "KWAnimationView.h"
+#import "KWProgressHUD.h"
 #define ARC_WIDHT 3
 #define DEGREES_TO_RADIANS(angle) ((angle * M_PI) / 180.0 )
 #define ANIMATE_DURATION          0.75
 
 #define FIRST_ANIMATION_START_ANGLE 330
 #define FIRST_ANIMATION_END_ANGLE   90
-#define ANIMATION_DRAW_COLOR [UIColor blueColor]
 
+#define KW_HUD_RADIUS  25
 
-#define KW_HUD_WIDTH  200
-#define KW_HUD_HEIGHT 200
-
-@interface KWAnimationView() {
-    CGFloat _rotatedAngle;
+@interface KWProgressHUD() {
+    CGFloat       _rotatedAngle;
     CATransform3D _lastTransform;
-    CAShapeLayer *_activeLayer;
-    CAShapeLayer *_newLayer;
-    UIView *_baseView;
+    CAShapeLayer  *_activeLayer;
+    CAShapeLayer  *_newLayer;
+    UIView        *_baseView;
+    UIColor       *_circleColor;
 }
 @end
 
-@implementation KWAnimationView
+@implementation KWProgressHUD
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -37,14 +35,22 @@
     // Drawing code
 }
 */
-+ (void)showHUDAddedToView:(UIView *)view {
+
+#pragma mark - Public Method
++ (void)showToView:(UIView *)view
+             color:(UIColor *)color {
     CGRect baseRect = view.frame;
-    KWAnimationView *hud = [[KWAnimationView alloc] init];
-    hud.frame = CGRectMake((baseRect.size.width - KW_HUD_WIDTH)/2,
-                           (baseRect.size.height - KW_HUD_HEIGHT)/2,
-                           KW_HUD_WIDTH,
-                           KW_HUD_HEIGHT);
-    hud.backgroundColor = [UIColor grayColor];
+    int hudWidth = KW_HUD_RADIUS * 2;
+    int hudHeight = KW_HUD_RADIUS * 2;
+    KWProgressHUD *hud = [[KWProgressHUD alloc] init];
+    hud.frame = CGRectMake((baseRect.size.width - hudWidth)/2,
+                           (baseRect.size.height - hudHeight)/2,
+                           hudWidth,
+                           hudHeight);
+    if (color) {
+        hud->_circleColor = color;
+    }
+    hud.backgroundColor = view.backgroundColor;
     [hud initAnimation];
     hud->_baseView = view;
     [hud->_baseView addSubview:hud];
@@ -53,12 +59,18 @@
     [timer fire];
 }
 
++ (void)hidForView:(UIView *)view {
+    NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
+    for (UIView *subview in subviewsEnum) {
+        if ([subview isKindOfClass:self]) {
+            [subview removeFromSuperview];
+        }
+    }
+}
+
 #pragma mark - Animation Delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    //    if (_newLayer) {
-    //        [_activeLayer removeFromSuperlayer];
-    //        _activeLayer = _newLayer;
-    //    }
+    
 }
 
 
@@ -94,7 +106,7 @@
 - (void)firstAnimation {
     [self animateWithStartAngle:FIRST_ANIMATION_START_ANGLE
                        endAngle:FIRST_ANIMATION_END_ANGLE
-                    strokeColor:ANIMATION_DRAW_COLOR
+                    strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
                        duration:0];
@@ -114,7 +126,7 @@
 - (void)thirdAnimation {
     [self animateWithStartAngle:45 + _rotatedAngle
                        endAngle:50 + _rotatedAngle
-                    strokeColor:ANIMATION_DRAW_COLOR
+                    strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
                        duration:ANIMATE_DURATION];
@@ -136,7 +148,7 @@
 - (void)fifthAnimation {
     [self animateWithStartAngle:150 + _rotatedAngle
                        endAngle:-90 + _rotatedAngle
-                    strokeColor:ANIMATION_DRAW_COLOR
+                    strokeColor:[self circleColor]
                       lineWidth:3
                       clockwise:YES
                        duration:ANIMATE_DURATION];
@@ -144,7 +156,7 @@
     [self rotateWithAngle:180];
 }
 
-#pragma mark - Private Method
+#pragma mark - Private Animation Method
 -(void)animateWithStartAngle:(CGFloat)start
                     endAngle:(CGFloat)end
                  strokeColor:(UIColor *)strokeColor
@@ -156,8 +168,8 @@
     CGFloat endAngle = 360 - end;
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    [path addArcWithCenter:CGPointMake(100, 100)
-                    radius:30
+    [path addArcWithCenter:CGPointMake(KW_HUD_RADIUS, KW_HUD_RADIUS)
+                    radius:KW_HUD_RADIUS
                 startAngle:DEGREES_TO_RADIANS(startAngle)
                   endAngle:DEGREES_TO_RADIANS(endAngle)
                  clockwise:clockwise];
@@ -174,7 +186,6 @@
     shapeLayer.strokeColor = strokeColor.CGColor;
     shapeLayer.lineWidth = width;
     shapeLayer.frame = _baseView.frame;
-//    shapeLayer.frame = self.frame;
     
     CABasicAnimation *bas = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     bas.duration = duration;
@@ -195,5 +206,23 @@
     [UIView commitAnimations];
 }
 
+#pragma mark - Private Method
++ (instancetype)HUDForView:(UIView *)view {
+    NSEnumerator *subviewsEnum = [view.subviews reverseObjectEnumerator];
+    for (UIView *subview in subviewsEnum) {
+        if ([subview isKindOfClass:self]) {
+            return (KWProgressHUD *)subview;
+        }
+    }
+    return nil;
+}
 
+- (UIColor *)circleColor {
+    if (_circleColor) {
+        return _circleColor;
+    }
+    else {
+        return [UIColor blueColor];
+    }
+}
 @end

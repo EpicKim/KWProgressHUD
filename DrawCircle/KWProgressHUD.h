@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KWAnimationView : UIView
-+ (void)showHUDAddedToView:(UIView *)view;
+@interface KWProgressHUD : UIView
++ (void)showToView:(UIView *)view
+             color:(UIColor *)color;
++ (void)hidForView:(UIView *)view;
 @end
