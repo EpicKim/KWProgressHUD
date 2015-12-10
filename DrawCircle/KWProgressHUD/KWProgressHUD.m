@@ -113,18 +113,22 @@ _Pragma("clang diagnostic pop") \
 
 #pragma mark - Animation Delegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if (!anim.removedOnCompletion) {
+        return;
+    }
     if (!flag) {
         return;
     }
     _animationCount ++;
-    _animationCount = _animationCount % 4;
-    if (_animationCount == 0) {
+    int remainder = _animationCount % self.animationSelectorArray.count;
+    if (remainder == 0) {
+        _animationCount = 0;
         [self setupAnimation];
     }
     KWAnimationObject *animationObject = [self.animationSelectorArray objectAtIndex:_animationCount];
     if ([self respondsToSelector:animationObject.selector]) {
         KW_SuppressPerformSelectorLeakWarning(
-        [self performSelector:animationObject.selector withObject:nil]
+            [self performSelector:animationObject.selector];
         );
     }
 }
@@ -155,6 +159,7 @@ _Pragma("clang diagnostic pop") \
         CAShapeLayer *layer = [layers objectAtIndex:i];
         [layer removeFromSuperlayer];
     }
+    
     [self animateWithStartAngle:KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle
                        endAngle:KW_FIRST_ANIMATION_END_ANGLE + _rotatedAngle
                     strokeColor:[self circleColor]
