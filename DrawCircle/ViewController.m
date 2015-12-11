@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "KWProgressHUD.h"
+#import "SecondViewController.h"
 
 @interface ViewController ()
 {
@@ -29,11 +30,23 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+//    self.edgesForExtendedLayout = UIRectEdgeNone;
+//    self.navigationController.navigationBar.translucent = NO;
     
-    [KWProgressHUD showToView:self.view
-                        color:[UIColor redColor]
-                        image:nil];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Go"
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(pushToNext)];
+    
+    self.navigationItem.rightBarButtonItem = item;
+    
+    [self draw:nil];
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -50,6 +63,10 @@
     [KWProgressHUD showToView:self.view
                         color:nil
                         image:nil];
+}
+
+- (void)pushToNext {
+    [self.navigationController pushViewController:[[SecondViewController alloc] init] animated:YES];
 }
 
 @end

@@ -60,46 +60,47 @@ _Pragma("clang diagnostic pop") \
 + (void)showToView:(UIView *)view
              color:(UIColor *)color
              image:(UIImage *)image {
-    CGRect baseRect = view.frame;
-    int hudWidth = KW_HUD_RADIUS * 2;
-    int hudHeight = KW_HUD_RADIUS * 2;
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    
-    CGRect hudRect = CGRectMake((baseRect.size.width - hudWidth)/2,
-                                (screenRect.size.height - hudHeight)/2 - 64,
-                                hudWidth,
-                                hudHeight);
-    KWBackgroundView *backgroundView = [[KWBackgroundView alloc] init];
-    backgroundView.backgroundColor = view.backgroundColor;
-    backgroundView.frame = hudRect;
-    
-    KWProgressHUD *hud = [[KWProgressHUD alloc] init];
-    hud.frame = CGRectMake(0,
-                           0,
-                           hudWidth,
-                           hudHeight);;
-    if (color) {
-        hud->_circleColor = color;
-    }
-    hud.backgroundColor = [UIColor clearColor];
-    [hud initAnimation];
-    hud->_baseView = view;
-    [hud->_baseView addSubview:backgroundView];
-    [backgroundView addSubview:hud];
-    
-    // set image
-    if (image) {
-        int imageWidth = image.size.width/2;
-        int imageHeight = image.size.height/2;
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.frame = CGRectMake((hudWidth - imageWidth)/2,
-                                     (hudHeight - imageHeight)/2,
-                                     imageWidth,
-                                     imageHeight);
-        [backgroundView insertSubview:imageView belowSubview:hud];
-    }
-    
-    [hud startCycleAnimation];
+
+        CGRect baseRect = view.frame;
+        int hudWidth = KW_HUD_RADIUS * 2;
+        int hudHeight = KW_HUD_RADIUS * 2;
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        
+        CGRect hudRect = CGRectMake((baseRect.size.width - hudWidth)/2,
+                                    (screenRect.size.height - hudHeight)/2 - 64,
+                                    hudWidth,
+                                    hudHeight);
+        KWBackgroundView *backgroundView = [[KWBackgroundView alloc] init];
+        backgroundView.backgroundColor = view.backgroundColor;
+        backgroundView.frame = hudRect;
+        
+        KWProgressHUD *hud = [[KWProgressHUD alloc] init];
+        hud.frame = CGRectMake(0,
+                               0,
+                               hudWidth,
+                               hudHeight);;
+        if (color) {
+            hud->_circleColor = color;
+        }
+        hud.backgroundColor = [UIColor clearColor];
+        [hud initAnimation];
+        hud->_baseView = view;
+        [hud->_baseView addSubview:backgroundView];
+        [backgroundView addSubview:hud];
+        
+        // set image
+        if (image) {
+            int imageWidth = image.size.width/2;
+            int imageHeight = image.size.height/2;
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+            imageView.frame = CGRectMake((hudWidth - imageWidth)/2,
+                                         (hudHeight - imageHeight)/2,
+                                         imageWidth,
+                                         imageHeight);
+            [backgroundView insertSubview:imageView belowSubview:hud];
+        }
+        
+        [hud startCycleAnimation];
 }
 
 + (void)hidForView:(UIView *)view {
@@ -128,8 +129,8 @@ _Pragma("clang diagnostic pop") \
     KWAnimationObject *animationObject = [self.animationSelectorArray objectAtIndex:_animationCount];
     if ([self respondsToSelector:animationObject.selector]) {
         KW_SuppressPerformSelectorLeakWarning(
-            [self performSelector:animationObject.selector];
-        );
+                                              [self performSelector:animationObject.selector];
+                                              );
     }
 }
 
@@ -166,6 +167,25 @@ _Pragma("clang diagnostic pop") \
                       lineWidth:KW_HUD_CIRCLE_WIDTH
                       clockwise:YES
                        duration:0];
+    //
+    //    CGFloat start = KW_FIRST_ANIMATION_START_ANGLE + _rotatedAngle;
+    //    CGFloat end = KW_FIRST_ANIMATION_END_ANGLE + _rotatedAngle;
+    //    CGFloat startAngle = 360 - start;
+    //    CGFloat endAngle = 360 - end;
+    //
+    //    UIBezierPath *path = [UIBezierPath bezierPath];
+    //    [path addArcWithCenter:CGPointMake(KW_HUD_RADIUS, KW_HUD_RADIUS - 64)
+    //                    radius:KW_HUD_RADIUS
+    //                startAngle:DEGREES_TO_RADIANS(startAngle)
+    //                  endAngle:DEGREES_TO_RADIANS(endAngle)
+    //                 clockwise:YES];
+    //    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    //    [self.layer addSublayer:shapeLayer];
+    //    shapeLayer.path = path.CGPath;//46,169,230
+    //    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    //    shapeLayer.strokeColor = [self circleColor].CGColor;
+    //    shapeLayer.lineWidth = KW_HUD_CIRCLE_WIDTH;
+    //    shapeLayer.frame = _baseView.frame;
 }
 
 - (void)firstAnimation {
@@ -224,18 +244,19 @@ _Pragma("clang diagnostic pop") \
     CGFloat endAngle = 360 - end;
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    [path addArcWithCenter:CGPointMake(KW_HUD_RADIUS, KW_HUD_RADIUS)
+    [path addArcWithCenter:CGPointMake(KW_HUD_RADIUS, KW_HUD_RADIUS - 64)
                     radius:KW_HUD_RADIUS
                 startAngle:DEGREES_TO_RADIANS(startAngle)
                   endAngle:DEGREES_TO_RADIANS(endAngle)
                  clockwise:clockwise];
+    
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    [self.layer addSublayer:shapeLayer];
     shapeLayer.path = path.CGPath;//46,169,230
     shapeLayer.fillColor = [UIColor clearColor].CGColor;
     shapeLayer.strokeColor = strokeColor.CGColor;
     shapeLayer.lineWidth = width;
     shapeLayer.frame = _baseView.frame;
+    [self.layer addSublayer:shapeLayer];
     
     if (duration > 0) {
         CABasicAnimation *bas = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -252,7 +273,7 @@ _Pragma("clang diagnostic pop") \
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:KW_ANIMATE_DURATION];
     [UIView setAnimationDelegate:self];
-    _lastTransform = CATransform3DRotate(_lastTransform, DEGREES_TO_RADIANS(angle) , 0, 0, 1);
+    _lastTransform = CATransform3DRotate(_lastTransform, DEGREES_TO_RADIANS(angle), 0, 0, 1);
     self.layer.transform = _lastTransform;
     [UIView commitAnimations];
 }

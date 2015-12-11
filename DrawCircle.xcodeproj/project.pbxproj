@@ -20,6 +20,7 @@
 		70069F2017CC8CDA00405A89 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70069F1F17CC8CDA00405A89 /* ViewController.m */; };
 		70069F2717CC8DC900405A89 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70069F2617CC8DC900405A89 /* QuartzCore.framework */; };
 		811E064C1C19466400C477C4 /* KWProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 811E064B1C19466400C477C4 /* KWProgressHUD.m */; };
+		81A72BA71C1A97F300EB9802 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81A72BA61C1A97F300EB9802 /* SecondViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		70069F2617CC8DC900405A89 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		811E064A1C19466400C477C4 /* KWProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWProgressHUD.h; sourceTree = "<group>"; };
 		811E064B1C19466400C477C4 /* KWProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWProgressHUD.m; sourceTree = "<group>"; };
+		81A72BA51C1A97F300EB9802 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
+		81A72BA61C1A97F300EB9802 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +94,8 @@
 		70069F0917CC8CD900405A89 /* DrawCircle */ = {
 			isa = PBXGroup;
 			children = (
+				81A72BA51C1A97F300EB9802 /* SecondViewController.h */,
+				81A72BA61C1A97F300EB9802 /* SecondViewController.m */,
 				70069F1217CC8CDA00405A89 /* AppDelegate.h */,
 				70069F1317CC8CDA00405A89 /* AppDelegate.m */,
 				70069F1B17CC8CDA00405A89 /* MainStoryboard.storyboard */,
@@ -191,6 +196,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81A72BA71C1A97F300EB9802 /* SecondViewController.m in Sources */,
 				70069F1017CC8CDA00405A89 /* main.m in Sources */,
 				70069F1417CC8CDA00405A89 /* AppDelegate.m in Sources */,
 				811E064C1C19466400C477C4 /* KWProgressHUD.m in Sources */,
